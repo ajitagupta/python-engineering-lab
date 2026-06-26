@@ -35,61 +35,23 @@ python -m venv .venv
 Then follow the README inside whichever concept folder you want to run —
 each lists its own dependencies and how to start it.
 
-## Concepts
+## Roadmap
 
-### Month 1 — Core Backend
+| Concept | Skill | Status | Folder |
+|---------|-------|--------|--------|
+| 01 — REST API | Flask routes, HTTP methods, JSON | ✅ Done | [01-rest-api](01-rest-api/) |
+| 02 — Validation & error handling | Input validation, status codes | ⬜ Planned | _coming soon_ |
+| 03 — Pytest API tests | Testing, test client, fixtures | ⬜ Planned | _coming soon_ |
+| 04 — SQLite persistence | Databases, storage, SQL | ⬜ Planned | _coming soon_ |
+| 05 — Search & filtering | Query parameters, filtering | ⬜ Planned | _coming soon_ |
+| 06 — Pagination | limit/offset, response metadata | ⬜ Planned | _coming soon_ |
+| 07 — File upload | Multipart uploads, CSV parsing | ⬜ Planned | _coming soon_ |
+| 08 — Background scheduler | Scheduled jobs, background tasks | ⬜ Planned | _coming soon_ |
+| 09 — Caching | Cache strategies, invalidation | ⬜ Planned | _coming soon_ |
+| 10 — Parser | Parsing, structured text | ⬜ Planned | _coming soon_ |
 
-| # | Concept | Notes |
-|---|---------|-------|
-| 01 | REST API | [01-rest-api](01-rest-api/) |
-| 02 | File uploader | _coming soon_ |
-| 03 | Configuration loader | _coming soon_ |
-| 04 | Logging system | _coming soon_ |
-
-### Month 2 — Databases
-
-| # | Concept | Notes |
-|---|---------|-------|
-| 05 | Repository pattern | _coming soon_ |
-| 06 | Pagination | _coming soon_ |
-| 07 | Search | _coming soon_ |
-| 08 | Transactions | _coming soon_ |
-
-### Month 3 — Infrastructure
-
-| # | Concept | Notes |
-|---|---------|-------|
-| 09 | Background scheduler | _coming soon_ |
-| 10 | Email service | _coming soon_ |
-| 11 | Caching | _coming soon_ |
-| 12 | Retry mechanism | _coming soon_ |
-
-### Month 4 — Architecture
-
-| # | Concept | Notes |
-|---|---------|-------|
-| 13 | Dependency injection | _coming soon_ |
-| 14 | Service layer | _coming soon_ |
-| 15 | Configuration management | _coming soon_ |
-| 16 | Exception handling | _coming soon_ |
-
-### Month 5 — Performance
-
-| # | Concept | Notes |
-|---|---------|-------|
-| 17 | Profiling | _coming soon_ |
-| 18 | Async API | _coming soon_ |
-| 19 | Connection pooling | _coming soon_ |
-| 20 | Batch processing | _coming soon_ |
-
-### Month 6 — Production
-
-| # | Concept | Notes |
-|---|---------|-------|
-| 21 | Docker | _coming soon_ |
-| 22 | Unit tests | _coming soon_ |
-| 23 | Integration tests | _coming soon_ |
-| 24 | CI with GitHub Actions | _coming soon_ |
+_Scoped to ten concepts for now; the back half (architecture, performance,
+production) gets planned once the pace settles._
 
 ---
 
