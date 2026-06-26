@@ -7,72 +7,91 @@ Python and software-engineering fundamentals by implementing one
 engineering concept at a time — from scratch, by hand — and writing down
 what I actually learned.
 
-This repo is aimed at **fellow beginners**. Each concept is small, runnable,
-and explained in plain language. If you're learning Python and want to
-follow along, you can run every concept yourself and read what tripped me up.
+This repo is aimed at **fellow beginners**. Each concept lives in its own
+folder, is small enough to read in one sitting, and has its own notes
+explaining how to run it and what tripped me up.
 
 ## How this lab works
 
 - One concept per folder, numbered in order (`01-...`, `02-...`).
 - I write the first version myself before looking at any reference solution.
   The point is understanding, not copying.
-- Each concept is small enough to read in one sitting.
-- The notes below each concept are honest — including what confused me.
+- Each concept folder has its own README with run instructions and notes.
 
-## How to run a concept
+## Getting started
 
-You'll need Python 3.12 or newer. These instructions are for Windows
-PowerShell (swap the activate line on macOS/Linux).
+You'll need Python 3.12 or newer.
 
 ```powershell
-# 1. Clone the repo and enter it
-git clone <your-repo-url>
+# Clone and enter the repo
+git clone https://github.com/ajitagupta/python-engineering-lab.git
 cd python-engineering-lab
 
-# 2. Create and activate a virtual environment
+# Create and activate a virtual environment
 python -m venv .venv
 .venv\Scripts\activate          # macOS/Linux: source .venv/bin/activate
-
-# 3. Install the concept's dependencies and run it
-cd 01-rest-api
-pip install -r requirements.txt
-python app.py
 ```
 
-Each concept folder has its own `requirements.txt` listing exactly what it
-needs, so you only install what that concept uses.
-
----
+Then follow the README inside whichever concept folder you want to run —
+each lists its own dependencies and how to start it.
 
 ## Concepts
 
 ### Month 1 — Core Backend
 
-#### 01 — REST API
+| # | Concept | Notes |
+|---|---------|-------|
+| 01 | REST API | [01-rest-api](01-rest-api/) |
+| 02 | File uploader | _coming soon_ |
+| 03 | Configuration loader | _coming soon_ |
+| 04 | Logging system | _coming soon_ |
 
-A minimal REST API with two routes: `GET /workouts` returns a list of
-workouts, `POST /workouts` accepts a new one and echoes it back. Built with
-Flask. No database yet — the data lives in memory and resets when the app
-restarts (that's what later concepts fix).
+### Month 2 — Databases
 
-**Run it:**
-```powershell
-cd 01-rest-api
-pip install -r requirements.txt
-python app.py
-# then open http://127.0.0.1:5000/workouts in your browser
-```
+| # | Concept | Notes |
+|---|---------|-------|
+| 05 | Repository pattern | _coming soon_ |
+| 06 | Pagination | _coming soon_ |
+| 07 | Search | _coming soon_ |
+| 08 | Transactions | _coming soon_ |
 
-**What I learned:**
+### Month 3 — Infrastructure
 
-> I learn how to scaffold a Flask app.
-> I was familiar with REST, but I learnt to write out a GET and POST request for a sports tracker API.
-> I experimented with lists and later converted them into dictionaries to optimize for the JSON format.
-> What's the difference between `request.get_json()` and `jsonify()`?
-> What does `if __name__ == "__main__":` actually decide?
-> The data-modelling bit: why store numbers as numbers, not "6km"?
+| # | Concept | Notes |
+|---|---------|-------|
+| 09 | Background scheduler | _coming soon_ |
+| 10 | Email service | _coming soon_ |
+| 11 | Caching | _coming soon_ |
+| 12 | Retry mechanism | _coming soon_ |
 
-**Concepts touched:** Flask routes, HTTP methods (GET/POST), request bodies,
-JSON responses, basic data modelling.
+### Month 4 — Architecture
 
+| # | Concept | Notes |
+|---|---------|-------|
+| 13 | Dependency injection | _coming soon_ |
+| 14 | Service layer | _coming soon_ |
+| 15 | Configuration management | _coming soon_ |
+| 16 | Exception handling | _coming soon_ |
 
+### Month 5 — Performance
+
+| # | Concept | Notes |
+|---|---------|-------|
+| 17 | Profiling | _coming soon_ |
+| 18 | Async API | _coming soon_ |
+| 19 | Connection pooling | _coming soon_ |
+| 20 | Batch processing | _coming soon_ |
+
+### Month 6 — Production
+
+| # | Concept | Notes |
+|---|---------|-------|
+| 21 | Docker | _coming soon_ |
+| 22 | Unit tests | _coming soon_ |
+| 23 | Integration tests | _coming soon_ |
+| 24 | CI with GitHub Actions | _coming soon_ |
+
+---
+
+_A learning project, updated as I work through it. Progress over speed —_
+_one concept genuinely understood beats five rushed._
