@@ -41,7 +41,7 @@ each lists its own dependencies and how to start it.
 |---------|-------|--------|-----------------------------|
 | 01 — REST API | Flask routes, HTTP methods, JSON | ✅ Done | [01-rest-api](01-rest-api/) |
 | 02 — Validation & error handling | Input validation, status codes | ✅ Done | [02-validation-error-handling](02-validation-error-handling/) |
-| 03 — Pytest API tests | Testing, test client, fixtures | ⬜ Planned | _coming soon_               |
+| 03 — Pytest API tests | Testing, test client, fixtures | ✅ Done | [03-pytest-api-tests](03-pytest-api-tests/)               |
 | 04 — SQLite persistence | Databases, storage, SQL | ⬜ Planned | _coming soon_               |
 | 05 — Search & filtering | Query parameters, filtering | ⬜ Planned | _coming soon_               |
 | 06 — Pagination | limit/offset, response metadata | ⬜ Planned | _coming soon_               |
