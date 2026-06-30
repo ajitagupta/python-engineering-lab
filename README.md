@@ -7,9 +7,9 @@ Python and software-engineering fundamentals by implementing one
 engineering concept at a time — from scratch, by hand — and writing down
 what I actually learned.
 
-This repo is aimed at **fellow beginners**. Each concept lives in its own
-folder, is small enough to read in one sitting, and has its own notes
-explaining how to run it and what tripped me up.
+Each concept lives in its own folder and focuses on one practical pattern
+at a time, with runnable code, concise documentation, and notes on
+implementation decisions.
 
 ## How this lab works
 
