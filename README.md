@@ -37,18 +37,18 @@ each lists its own dependencies and how to start it.
 
 ## Roadmap
 
-| Concept | Skill | Status | Folder                                                        |
-|---------|-------|--------|---------------------------------------------------------------|
-| 01 — REST API | Flask routes, HTTP methods, JSON | ✅ Done | [01-rest-api](01-rest-api/)                                   |
-| 02 — Validation & error handling | Input validation, status codes | ✅ Done | [02-validation-error-handling](02-validation-error-handling/) |
-| 03 — Pytest API tests | Testing, test client, fixtures | ✅ Done | [03-pytest-api-tests](03-pytest-api-tests/)                   |
-| 04 — SQLite persistence | Databases, storage, SQL | ✅ Done | [04-sqlite-persistence](04-sqlite-persistence/)                                                           |
-| 05 — Search & filtering | Query parameters, filtering | ⬜ Planned | _coming soon_                                                 |
-| 06 — Pagination | limit/offset, response metadata | ⬜ Planned | _coming soon_                                                 |
-| 07 — File upload | Multipart uploads, CSV parsing | ⬜ Planned | _coming soon_                                                 |
-| 08 — Background scheduler | Scheduled jobs, background tasks | ⬜ Planned | _coming soon_                                                 |
-| 09 — Caching | Cache strategies, invalidation | ⬜ Planned | _coming soon_                                                 |
-| 10 — Parser | Parsing, structured text | ⬜ Planned | _coming soon_                                                 |
+| Concept                          | Skill | Status | Folder                                                        |
+|----------------------------------|-------|--------|---------------------------------------------------------------|
+| 01 — REST API                    | Flask routes, HTTP methods, JSON | ✅ Done | [01-rest-api](01-rest-api/)                                   |
+| 02 — Validation & Error Handling | Input validation, status codes | ✅ Done | [02-validation-error-handling](02-validation-error-handling/) |
+| 03 — Pytest API Tests            | Testing, test client, fixtures | ✅ Done | [03-pytest-api-tests](03-pytest-api-tests/)                   |
+| 04 — SQLite Persistence          | Databases, storage, SQL | ✅ Done | [04-sqlite-persistence](04-sqlite-persistence/)                                                           |
+| 05 — Search & Filtering          | Query parameters, filtering | ⬜ Planned | _coming soon_                                                 |
+| 06 — Pagination                  | limit/offset, response metadata | ⬜ Planned | _coming soon_                                                 |
+| 07 — File Uploads                | Multipart uploads, CSV parsing | ⬜ Planned | _coming soon_                                                 |
+| 08 — Background Tasks            | Scheduled jobs, background tasks | ⬜ Planned | _coming soon_                                                 |
+| 09 — Caching                     | Cache strategies, invalidation | ⬜ Planned | _coming soon_                                                 |
+| 10 — Data Parsing & Extraction   | Parsing, structured text | ⬜ Planned | _coming soon_                                                 |
 
 _Scoped to ten concepts for now; the back half (architecture, performance,
 production) gets planned once the pace settles._
