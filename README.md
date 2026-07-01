@@ -7,9 +7,9 @@ Python and software-engineering fundamentals by implementing one
 engineering concept at a time — from scratch, by hand — and writing down
 what I actually learned.
 
-This repo is aimed at **fellow beginners**. Each concept lives in its own
-folder, is small enough to read in one sitting, and has its own notes
-explaining how to run it and what tripped me up.
+Each concept lives in its own folder and focuses on one practical pattern
+at a time, with runnable code, concise documentation, and notes on
+implementation decisions.
 
 ## How this lab works
 
@@ -37,18 +37,18 @@ each lists its own dependencies and how to start it.
 
 ## Roadmap
 
-| Concept | Skill | Status | Folder                      |
-|---------|-------|--------|-----------------------------|
-| 01 — REST API | Flask routes, HTTP methods, JSON | ✅ Done | [01-rest-api](01-rest-api/) |
+| Concept | Skill | Status | Folder                                                        |
+|---------|-------|--------|---------------------------------------------------------------|
+| 01 — REST API | Flask routes, HTTP methods, JSON | ✅ Done | [01-rest-api](01-rest-api/)                                   |
 | 02 — Validation & error handling | Input validation, status codes | ✅ Done | [02-validation-error-handling](02-validation-error-handling/) |
-| 03 — Pytest API tests | Testing, test client, fixtures | ✅ Done | [03-pytest-api-tests](03-pytest-api-tests/)               |
-| 04 — SQLite persistence | Databases, storage, SQL | ⬜ Planned | _coming soon_               |
-| 05 — Search & filtering | Query parameters, filtering | ⬜ Planned | _coming soon_               |
-| 06 — Pagination | limit/offset, response metadata | ⬜ Planned | _coming soon_               |
-| 07 — File upload | Multipart uploads, CSV parsing | ⬜ Planned | _coming soon_               |
-| 08 — Background scheduler | Scheduled jobs, background tasks | ⬜ Planned | _coming soon_               |
-| 09 — Caching | Cache strategies, invalidation | ⬜ Planned | _coming soon_               |
-| 10 — Parser | Parsing, structured text | ⬜ Planned | _coming soon_               |
+| 03 — Pytest API tests | Testing, test client, fixtures | ✅ Done | [03-pytest-api-tests](03-pytest-api-tests/)                   |
+| 04 — SQLite persistence | Databases, storage, SQL | ✅ Done | [04-sqlite-persistence](04-sqlite-persistence/)                                                           |
+| 05 — Search & filtering | Query parameters, filtering | ⬜ Planned | _coming soon_                                                 |
+| 06 — Pagination | limit/offset, response metadata | ⬜ Planned | _coming soon_                                                 |
+| 07 — File upload | Multipart uploads, CSV parsing | ⬜ Planned | _coming soon_                                                 |
+| 08 — Background scheduler | Scheduled jobs, background tasks | ⬜ Planned | _coming soon_                                                 |
+| 09 — Caching | Cache strategies, invalidation | ⬜ Planned | _coming soon_                                                 |
+| 10 — Parser | Parsing, structured text | ⬜ Planned | _coming soon_                                                 |
 
 _Scoped to ten concepts for now; the back half (architecture, performance,
 production) gets planned once the pace settles._
