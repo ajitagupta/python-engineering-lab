@@ -1,89 +1,108 @@
-# 04 — SQLite Persistence
+# 05 — Search & Filtering
 
-Building on the tested API from concept 03, this concept replaces the
-in-memory workouts list with a **SQLite database**, so data survives a
-restart and IDs are assigned by the database instead of being faked.
+Building on the persistent API from concept 04, this concept lets callers
+**narrow** the results with query parameters instead of always getting every
+workout. Filter by sport, minimum distance, minimum duration — or any
+combination.
 
-All database code lives in a separate `db.py` module (a **data access
-layer**). The Flask routes call functions like `get_all_workouts()` and
-`add_workout()` and never touch SQL directly — routes handle HTTP, `db.py`
-handles storage.
+The filters are optional and combine with `AND`. The query is built
+**dynamically** based on which filters are present, while still using `?`
+placeholders so it stays safe from SQL injection.
 
 ## Run it
 
-From the repo root, with your virtual environment activated:
-
 ```powershell
-cd 04-sqlite-persistence
+cd 05-search-filtering
 pip install -r requirements.txt
 python app.py
 ```
 
-On startup the app calls `init_db()`, which creates the `workouts` table if
-it doesn't already exist. The database lives in a local file, `workouts.db`.
+Add a few workouts first (one per request), then try the filters.
 
-## Try it out
+## Filtering
 
-The table starts empty. Add a workout — the response comes back with an
-`id` you never sent, because SQLite assigns it automatically:
+Query parameters go after a `?` in the URL:
 
 ```powershell
-Invoke-RestMethod -Uri http://127.0.0.1:5000/workouts -Method Post -ContentType "application/json" -Body '{"sport": "run", "distance_km": 6, "duration_min": 35}'
+# only runs
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/workouts?sport=run"
+
+# workouts of at least 5 km
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/workouts?min_distance=5"
+
+# workouts of at least 30 min
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/workouts?min_duration=30"
+
+# all three at once
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/workouts?sport=run&min_distance=5&min_duration=30"
+
+# no filters -> everything
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/workouts"
 ```
 
-List all workouts, or fetch one by id:
+## How the dynamic query works
 
-```powershell
-Invoke-RestMethod -Uri http://127.0.0.1:5000/workouts
-Invoke-RestMethod -Uri http://127.0.0.1:5000/workouts/1
-```
-
-**The key test — persistence:** add a workout, then stop the app (Ctrl+C)
-and start it again. The workout is still there, because it lives on disk in
-`workouts.db`, not in memory.
-
-## The data access layer (`db.py`)
-
-| Function | Does | SQL |
-|----------|------|-----|
-| `init_db()` | create the table if absent | `CREATE TABLE IF NOT EXISTS` |
-| `get_all_workouts()` | list all workouts | `SELECT * FROM workouts` |
-| `get_workout_by_id(id)` | fetch one, or None | `SELECT ... WHERE id = ?` |
-| `add_workout(data)` | insert, return with new id | `INSERT INTO ...` |
-
-Two `sqlite3` details worth knowing:
-
-- `con.row_factory = sqlite3.Row` makes rows accessible by column name, so
-  they convert cleanly to dicts (`dict(row)`) for JSON responses.
-- After an `INSERT`, `cursor.lastrowid` holds the id SQLite just assigned —
-  that's how a new workout gets a real id instead of a faked one.
-
-## Parameterized queries (`?`)
-
-Values from a request are always passed with `?` placeholders, never built
-into the SQL string:
+The route reads each query parameter from `request.args` (converting the
+numeric ones to `float`) and passes plain values to `db.search_workouts()`.
+That function builds the query from two parallel lists:
 
 ```python
-cur.execute("SELECT * FROM workouts WHERE id = ?", (workout_id,))
+conditions = []          # query STRUCTURE: "sport = ?", "distance_km >= ?"
+values = []              # the actual VALUES, kept out of the string
+
+if sport is not None:
+    conditions.append("sport = ?")
+    values.append(sport)
+# ... same shape for each filter
+
+query = "SELECT * FROM workouts"
+if conditions:
+    query += " WHERE " + " AND ".join(conditions)
+
+cur.execute(query, tuple(values))
 ```
 
-This keeps user input as **data**, never executable SQL — which is what
-prevents SQL injection. Building the query with an f-string
-(`f"... id = {workout_id}"`) would let malicious input run as commands.
+Each new filter is just another `if` block appending a condition and a
+value — the `" AND ".join(...)` handles zero, one, or many filters with no
+special cases.
+
+**Why it stays injection-safe:** only the *structure* (the `sport = ?`
+fragments, with placeholders) is built into the query string. The *values*
+never touch the string — they go through the parameter list and the
+database binds them as data. Dynamic query building and parameterized
+safety are not in conflict.
+
+## A NULL detail worth knowing
+
+A rest day has `duration_min` of `NULL`. Filtering by `?min_duration=30`
+correctly excludes it, because in SQL `NULL >= 30` is "unknown", not true —
+so NULL values never match a `>=` filter. That's the behaviour you want,
+but SQL's NULL comparisons surprise people.
+
+## Deliberately deferred
+
+Query-parameter values are **not** validated for type here — e.g.
+`?min_distance=banana` would fail the `float()` conversion and error. This
+is a conscious scope choice to keep the concept focused on filtering, not a
+finished behaviour. (Concept 02's validation guards the POST body, a
+different input channel — it does not cover query params.) Handling this
+cleanly with a 400 would be a natural next improvement.
 
 ## What I learned
 
-> - Why `?` placeholders instead of f-strings? (data, not code — the SQL
-> injection boundary.)
-> - What does a "data access layer" give you? Why keep all SQL in db.py
->  and out of the routes?_
-> - Why does INSERT omit the id, and how does the database assign it?
-> - Why does commit() matter, and what happens if you forget it?
-> - Reuse of db functions from db.py / db module
-> - dict(row) to convert a sqlite3.Row to a dict for JSON responses
+> - What are query parameters, and how do they differ from path params
+> - Request body as an input channel
+> - Why do query params always arrive as strings, and what did you have
+>  to do about it for the numeric filters?
+> - The key one: how is a dynamically-built query still injection-safe?
+> (structure as string, values kept separate.)
+> - Why does the two-lists-then-join pattern scale to any number of
+> filters without special cases?
 
 ## Concepts touched
 
-SQLite, the `sqlite3` library (connect / cursor / execute / fetch /
-commit), parameterized queries and SQL injection, `row_factory`,
-auto-incrementing primary keys, `lastrowid`, the data-access-layer pattern.
+Query parameters (`request.args`), optional filters, dynamic query
+building, conditional WHERE clauses, keeping parameterized safety with
+dynamic SQL, string-to-number conversion of query params, SQL NULL
+comparison behaviour, separation of concerns (route reads HTTP, db.py
+builds SQL).
