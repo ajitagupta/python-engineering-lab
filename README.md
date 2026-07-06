@@ -44,7 +44,7 @@ each lists its own dependencies and how to start it.
 | 03 — Pytest API Tests            | Testing, test client, fixtures | ✅ Done | [03-pytest-api-tests](03-pytest-api-tests/)                   |
 | 04 — SQLite Persistence          | Databases, storage, SQL | ✅ Done | [04-sqlite-persistence](04-sqlite-persistence/)                                                           |
 | 05 — Search & Filtering          | Query parameters, filtering | ✅ Done | [05-search-filtering](05-search-filtering/)                                                   |
-| 06 — Pagination                  | limit/offset, response metadata | ⬜ Planned | _coming soon_                                                 |
+| 06 — Pagination                  | limit/offset, response metadata | ✅ Done | [06-pagination](06-pagination/)                                                 |
 | 07 — File Uploads                | Multipart uploads, CSV parsing | ⬜ Planned | _coming soon_                                                 |
 | 08 — Background Tasks            | Scheduled jobs, background tasks | ⬜ Planned | _coming soon_                                                 |
 | 09 — Caching                     | Cache strategies, invalidation | ⬜ Planned | _coming soon_                                                 |
