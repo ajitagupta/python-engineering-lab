@@ -1,12 +1,12 @@
 # 07 — File Upload
 
 Building on the API from concept 06, this concept adds a route to upload a
-**CSV file** of workouts, rather than posting them one at a time as JSON.
+**CSV file** of workouts and bulk-insert them, rather than posting one at a
+time as JSON.
 
-> **Status: part 1 of 2.** The upload and CSV parsing are done. The cleanup
-> (strings to numbers, empty strings to None), per-row validation, and
-> bulk insertion — including the design decision about what to do when
-> some rows are invalid — are the unfinished second half.
+The upload is **all-or-nothing**: every row is cleaned and validated first,
+and only if *all* rows are valid does *any* get inserted. One bad row rejects
+the whole file, so the database is never left half-imported.
 
 ## Run it
 
@@ -18,7 +18,7 @@ python app.py
 
 ## Uploading a CSV
 
-Files are sent as `multipart/form-data`, not JSON. Create a test CSV
+Files are sent as `multipart/form-data`. Create a test CSV
 (`test_workouts.csv`):
 
 ```
@@ -30,57 +30,96 @@ rest,,
 cycle,10,30
 ```
 
-Upload it with `curl.exe` (real curl, not PowerShell's alias):
+Upload it with real curl (not PowerShell's alias):
 
 ```powershell
 curl.exe -F "file=@test_workouts.csv" http://127.0.0.1:5000/workouts/upload
 ```
 
-`-F "file=@..."` sends a multipart form field named `file`; the `@` means
-"upload the file's contents". The route currently returns the parsed rows
-as JSON.
+- All rows valid -> `201` with `{"inserted": 5}`, and the workouts persist.
+- Any row invalid -> `400` with a list of errors (by row number), and
+  **nothing** is inserted.
 
-## How it works (so far)
 
-The file arrives through `request.files`, not the JSON body:
+### Failure cases (rejected uploads)
 
-```python
-file = request.files.get("file")
-if file is None:
-    return jsonify({"error": "No file provided."}), 400
-text = file.read().decode("utf-8")
+**Invalid sport.** A CSV with a sport not in the allowed list:
+
+```
+sport,distance_km,duration_min
+banana,5,30
 ```
 
-The decoded text is parsed with `csv.DictReader`, which reads the first row
-as headers and yields each row as a dict keyed by those headers:
-
-```python
-reader = csv.DictReader(io.StringIO(text))
-workouts = list(reader)
+```powershell
+curl.exe -F "file=@bad_sport.csv" http://127.0.0.1:5000/workouts/upload
 ```
 
-`io.StringIO` wraps the string so DictReader can read it like a file.
+Returns `400` with:
+```json
+{ "errors": ["Row 1: The key sport is invalid. Must be swim, run, badminton, cycle, strength, or rest."] }
+```
 
-## The messy-data problem (to solve in part 2)
+**All-or-nothing: one bad row among good ones.** A CSV where most rows are
+valid but one is not (here a `run` missing its required distance and
+duration):
 
-The parsed rows expose two issues that part 2 must handle:
+```
+sport,distance_km,duration_min
+run,6.0,35
+swim,0.4,27
+run,,
+cycle,10,30
+```
 
-- **Every value is a string.** `distance_km` comes in as `"6.0"`, not the
-  number `6.0` — CSV has no types. These need converting before they can be
-  validated or stored.
-- **Empty fields are empty strings, not None.** A rest day's blank
-  `distance_km` parses as `""`, but the data model uses `None` (SQL NULL)
-  for absent optional fields. `""` is neither a valid number nor a proper
-  null, so it must be converted to `None`.
+```powershell
+curl.exe -F "file=@mixed.csv" http://127.0.0.1:5000/workouts/upload
+```
 
-## Still to build (part 2)
+Returns `400` naming the bad row, and **inserts nothing** — not even the
+three valid rows. Confirm with `GET /workouts`: the count is unchanged. This
+is the all-or-nothing guarantee: one bad row rejects the whole file.
 
-- Convert numeric strings to numbers; convert empty strings to `None`.
-- Validate each row (reusing the validation rules from concept 02).
-- Insert the valid workouts (reusing `add_workout` from concept 04).
-- **Design decision:** when some rows are valid and some aren't, does the
-  upload reject the whole file, or insert the valid rows and report the
-  failures? (To be decided in part 2.)
+
+## The pipeline
+
+Upload -> parse -> clean -> validate -> (all-or-nothing) -> insert.
+
+**Parse.** The file comes through `request.files`, is decoded to text, and
+parsed with `csv.DictReader` (via `io.StringIO`) into a list of dicts keyed
+by the CSV headers.
+
+**Clean.** CSV gives everything as strings, and blank fields as empty
+strings. `clean_row` converts numeric strings to numbers and empty strings
+to `None` (matching the data model, where absent optional fields are NULL):
+
+```python
+"distance_km": float(distance_km) if distance_km else None
+```
+
+**Validate.** `validate_data` checks each cleaned row against the same rules
+as the POST route (valid sport, tier requirements, numbers not negative) and
+returns an error string or `None`.
+
+**All-or-nothing insert.** Two phases: first loop cleans and validates every
+row, collecting errors; only if there are zero errors does the second loop
+insert. This is why validation must finish for *all* rows before *any*
+insert — otherwise a bad row 4 would leave rows 1-3 already in the database.
+
+## Known gaps (deliberately deferred)
+
+- **Duplicated validation.** `validate_data` duplicates the validation logic
+  from concept 02's POST route. They are kept in sync by hand for now; a
+  future refactor should extract one shared `validate_workout` called by both
+  paths.
+- **Non-numeric values crash cleaning.** A CSV value like `distance_km=abc`
+  makes `float("abc")` raise during `clean_row`, before validation — a 500
+  instead of a clean per-row error. Wrapping the conversion to report it as a
+  validation failure would fix this.
+- **No transaction.** If an insert failed partway through phase two, earlier
+  rows would already be committed. A database transaction (concept 08
+  territory) would make the insert truly atomic.
+- **No file-size / type limits.** Production uploads should cap size and
+  check the file is actually a CSV.
 
 ## What I learned
 
@@ -89,9 +128,13 @@ The parsed rows expose two issues that part 2 must handle:
 > - Why does csv.DictReader need io.StringIO?
 > - Why do CSV values arrive as strings, and why are empty fields empty
 >  strings rather than None?
+> - Why does all-or-nothing require validating ALL rows before inserting ANY?
+> - How did earlier concepts (add_workout, the validation rules) get reused here?
+> - What is refactoring and why is it important to avoid duplicated validation logic?
 
-## Concepts touched (so far)
+## Concepts touched
 
-Multipart file uploads (`request.files`), reading and decoding an uploaded
-file, CSV parsing with `csv.DictReader`, `io.StringIO`, the string-vs-typed
-and empty-string-vs-None problems of parsed data.
+Multipart file uploads (`request.files`), CSV parsing (`csv.DictReader`,
+`io.StringIO`), cleaning messy data (strings to numbers, empty to None),
+per-row validation, all-or-nothing bulk insert, `enumerate` for row-numbered
+errors, reusing earlier building blocks (`add_workout`, validation rules).

@@ -76,6 +76,35 @@ def get_workout_by_id(workout_id):
 import csv
 import io
 
+
+def clean_row(row):
+    distance_km = row.get("distance_km")
+    duration_min = row.get("duration_min")
+    return {
+        "sport": row.get("sport"),
+        "distance_km": float(distance_km) if distance_km else None,
+        "duration_min": float(duration_min) if duration_min else None,
+    }
+
+def validate_data(data):
+    sport = data.get("sport")
+    distance_km = data.get("distance_km")
+    duration_min = data.get("duration_min")
+
+    allowed_sports = ["swim", "run", "badminton", "cycle", "strength", "rest"]
+    if sport not in allowed_sports:
+        return "The key sport is invalid. Must be swim, run, badminton, cycle, strength, or rest."
+    if distance_km is not None and distance_km < 0:
+        return "The key distance_km is invalid. Must not be negative."
+    if duration_min is not None and duration_min < 0:
+        return "The key duration_min is invalid. Must not be negative."
+    if duration_min is None and sport in ["run", "swim", "cycle", "badminton", "strength"]:
+        return "The key duration_min is missing."
+    if distance_km is None and sport in ["run", "swim", "cycle"]:
+        return "The key distance_km is missing."
+
+    return None
+
 @app.route('/workouts/upload', methods=['POST'])
 def upload_workout():
 
@@ -88,7 +117,25 @@ def upload_workout():
     reader = csv.DictReader(io.StringIO(text))
     workouts = list(reader)
 
-    return jsonify(workouts)
+    cleaned = []
+    errors = []
+
+    for i, raw_row in enumerate(workouts, start=1):
+        clean = clean_row(raw_row)    # clean this one row
+        error = validate_data(clean)  # validate the cleaned row
+        if error is not None:
+            errors.append(f"Row {i}: {error}")
+        else:
+            cleaned.append(clean)
+
+    # all-or-nothing decision, AFTER the loop:
+    if errors:
+        return jsonify({"errors": errors}), 400  # something failed -> insert nothing
+
+    for workout in cleaned:
+        db.add_workout(workout)
+
+    return jsonify({"inserted": len(cleaned)}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
