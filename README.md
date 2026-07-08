@@ -45,7 +45,7 @@ each lists its own dependencies and how to start it.
 | 04 — SQLite Persistence          | Databases, storage, SQL | ✅ Done | [04-sqlite-persistence](04-sqlite-persistence/)                                                           |
 | 05 — Search & Filtering          | Query parameters, filtering | ✅ Done | [05-search-filtering](05-search-filtering/)                                                   |
 | 06 — Pagination                  | limit/offset, response metadata | ✅ Done | [06-pagination](06-pagination/)                                                 |
-| 07 — File Uploads                | Multipart uploads, CSV parsing | ⬜ Planned | _coming soon_                                                 |
+| 07 — File Uploads                | Multipart uploads, CSV parsing | ✅ Done | [07-file-upload](07-file-upload/)                                                 |
 | 08 — Background Tasks            | Scheduled jobs, background tasks | ⬜ Planned | _coming soon_                                                 |
 | 09 — Caching                     | Cache strategies, invalidation | ⬜ Planned | _coming soon_                                                 |
 | 10 — Data Parsing & Extraction   | Parsing, structured text | ⬜ Planned | _coming soon_                                                 |
