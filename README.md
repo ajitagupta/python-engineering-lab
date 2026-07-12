@@ -4,7 +4,7 @@
 
 A learning-in-public project. I'm a software engineer consolidating my Python
 and backend fundamentals by implementing one engineering concept at a time —
-from scratch, by hand, reviewing rather than copying — and writing down what I
+from scratch, by hand, understanding rather than copying — and writing down what I
 actually learned along the way.
 
 The concepts aren't isolated exercises. Together they build **one API** — a
