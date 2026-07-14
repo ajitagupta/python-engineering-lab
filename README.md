@@ -69,17 +69,17 @@ earlier ones, so reading them in order shows the API taking shape.
 
 Each concept adds one capability to the same workout-tracker API.
 
-| Concept | What it adds to the API | Skill | Status | Folder |
-|---------|------------------------|-------|--------|--------|
-| 01 — REST API | List and create workouts over HTTP | Flask routes, HTTP methods, JSON | ✅ Done | [01-rest-api](01-rest-api/) |
-| 02 — Validation & Error Handling | Reject bad input with clear errors and status codes | Input validation, 400/404, conditional rules | ✅ Done | [02-validation-error-handling](02-validation-error-handling/) |
-| 03 — Pytest API Tests | An automated test suite proving the API works | pytest, test client, fixtures | ✅ Done | [03-pytest-api-tests](03-pytest-api-tests/) |
-| 04 — SQLite Persistence | Store workouts in a database that survives restarts | SQL, a data-access layer, `sqlite3` | ✅ Done | [04-sqlite-persistence](04-sqlite-persistence/) |
-| 05 — Search & Filtering | Filter workouts by sport, distance, duration | Query parameters, dynamic SQL | ✅ Done | [05-search-filtering](05-search-filtering/) |
-| 06 — Pagination | Return results in pages with total-count metadata | `LIMIT`/`OFFSET`, response metadata | ✅ Done | [06-pagination](06-pagination/) |
-| 07 — File Uploads | Bulk-import workouts from a CSV, all-or-nothing | Multipart uploads, CSV parsing | ✅ Done | [07-file-upload](07-file-upload/) |
-| 08 — Background Scheduler | Log a workout summary periodically, on a timer | Scheduled jobs, background threads | ✅ Done | [08-background-scheduler](08-background-scheduler/) |
-| 09 — Caching | Serve repeated reads faster with a cache | Cache strategies, invalidation | ⬜ Planned | _coming soon_ |
+| Concept | What it adds to the API | Skill | Status    | Folder |
+|---------|------------------------|-------|-----------|--------|
+| 01 — REST API | List and create workouts over HTTP | Flask routes, HTTP methods, JSON | ✅ Done    | [01-rest-api](01-rest-api/) |
+| 02 — Validation & Error Handling | Reject bad input with clear errors and status codes | Input validation, 400/404, conditional rules | ✅ Done    | [02-validation-error-handling](02-validation-error-handling/) |
+| 03 — Pytest API Tests | An automated test suite proving the API works | pytest, test client, fixtures | ✅ Done    | [03-pytest-api-tests](03-pytest-api-tests/) |
+| 04 — SQLite Persistence | Store workouts in a database that survives restarts | SQL, a data-access layer, `sqlite3` | ✅ Done    | [04-sqlite-persistence](04-sqlite-persistence/) |
+| 05 — Search & Filtering | Filter workouts by sport, distance, duration | Query parameters, dynamic SQL | ✅ Done    | [05-search-filtering](05-search-filtering/) |
+| 06 — Pagination | Return results in pages with total-count metadata | `LIMIT`/`OFFSET`, response metadata | ✅ Done    | [06-pagination](06-pagination/) |
+| 07 — File Uploads | Bulk-import workouts from a CSV, all-or-nothing | Multipart uploads, CSV parsing | ✅ Done    | [07-file-upload](07-file-upload/) |
+| 08 — Background Scheduler | Log a workout summary periodically, on a timer | Scheduled jobs, background threads | ✅ Done    | [08-background-scheduler](08-background-scheduler/) |
+| 09 — Caching | Serve repeated reads faster with a cache | Cache strategies, invalidation | ✅ Done      | [09-caching](09-caching/) |
 | 10 — Data Parsing & Extraction | Parse structured text into workouts | Parsing, structured text | ⬜ Planned | _coming soon_ |
 
 _Scoped to ten concepts for now; a back half (architecture, performance,
